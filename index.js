@@ -22,13 +22,30 @@ app.get('/alunos', (req,res) => {
 const socketio = require("socket.io");
 const io = socketio.listen(server);
 
+const colors = ['red','blue', 'green', 'lime', 'pink', 'grey', 'fuchsia', 'indigo', 'chocolate', 'coral', 'lightblue', 'lightgreen', 'violet'];
+var   coloridx = 0;
 
 io.on("connection", (socket) => {
+    var mycolor;
+    var mynick;
+
     console.log("one more connection");
-    socket.on("mensagem", (dados) => {
-        console.log(dados);
-        io.emit("mensagem",dados);
+    
+    socket.on("mensagem", (text) => {
+        console.log(text);
+        io.emit("mensagem",{"nick":mynick, "color":mycolor, "msg": text});
     });
+
+    socket.on("nick", (nick) => {
+        console.log("nick:"+nick);
+        mynick = nick;
+        coloridx++;
+        mycolor = colors[coloridx % colors.length];
+        socket.emit("nick", {"nick":nick, "color":mycolor});
+        socket.broadcast.emit("new", {"nick":nick, "color":mycolor});
+    });
+
+
 });
 
 server.listen(port, ()  => {

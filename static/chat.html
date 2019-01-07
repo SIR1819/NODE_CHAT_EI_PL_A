@@ -9,6 +9,10 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
+    <div id="connect">
+        <input type="text" id="nick">
+        <button id="bnick">Conectar</button>
+    </div>
     <div id="afixa">
         <input type="text" id="msg">
         <button id="bpost">Afixa</button>
@@ -19,6 +23,17 @@
 <script>
     
     var socket = io.connect();
+    $("#afixa").hide();
+    $("#connect").show();
+
+    $("#bnick").click(function () {
+        if ($("#nick").val() !== "") {
+            socket.emit("nick",$("#nick").val());
+            $("#msg").val("");
+        }
+    });
+
+
 
     $("#bpost").click(function () {
         //$("#msgboard").append($("<p/>").html($("#msg").val()));
@@ -28,8 +43,18 @@
     });
 
     socket.on("mensagem", function (dados) {
-        $("#msgboard").append($("<p/>").html(dados));
-    })
+        $("#msgboard").append($("<p/>").html(dados.nick + ": "+ dados.msg).css('color',dados.color));
+    });
+
+    socket.on("new", function (newuser) {
+        $("#msgboard").append($("<p/>").html("*** NEW USER ***" + newuser.nick).css("color",newuser.color));
+    });
+
+    socket.on("nick", function (user) {
+        $("#msgboard").append($("<p/>").html(user.nick + " : YOU ARE CONNECTED").css("color",user.color));
+        $("#connect").hide();
+        $("#afixa").show();
+    });
 
     
 </script>
