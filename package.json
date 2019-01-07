@@ -1,0 +1,19 @@
+{
+  "name": "chatinho",
+  "version": "1.0.0",
+  "description": "chat experimental",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "socket.io"
+  ],
+  "author": "Pedro Miguel Moreira",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  }
+}
